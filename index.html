@@ -114,25 +114,54 @@
       color: #3a3a3c;
     }
 
-    /* 计数器组合 */
+    /* 计数器组合容器：确保内部元素居中且有微小间距 */
     .counter-group {
       display: flex;
       align-items: center;
       flex: 1;
-      gap: 3px;
+      gap: 2px;
+      justify-content: flex-end;
+      /* 使计数器整体向右靠齐 */
     }
 
+    /* 修改输入框：增加宽度以容纳 5 位数 */
+    .count-input {
+      width: 100%;
+      min-width: 55px;
+      /* 关键修改：从 40px 增加到 55px，确保 10000 显示完整 */
+      border: 1px solid #efeff4;
+      text-align: center;
+      padding: 6px 0;
+      /* 略微增加上下高度，手机更易点击 */
+      font-size: 0.95rem;
+      border-radius: 4px;
+      background: #f9f9f9;
+    }
+
+    /* 隐藏 Chrome/Safari 的默认数字上下箭头，防止挤占宽度 */
+    .count-input::-webkit-outer-spin-button,
+    .count-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* 按钮：调整为长方形感 */
     .btn-op {
-      width: 20px;
-      height: 28px;
+      width: 22px;
+      /* 宽度 */
+      height: 30px;
+      /* 高度（略微拉长，更像条状） */
+      flex-shrink: 0;
+      /* 强制保持宽度，不被压缩 */
       border: none;
-      border-radius: 6px;
-      font-size: 18px;
+      border-radius: 4px;
+      font-size: 16px;
       cursor: pointer;
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 0;
     }
 
     .btn-minus {
@@ -141,17 +170,6 @@
 
     .btn-plus {
       background-color: var(--success);
-    }
-
-    .count-input {
-      width: 100%;
-      min-width: 40px;
-      border: 1px solid #efeff4;
-      text-align: center;
-      padding: 5px 0;
-      font-size: 0.95rem;
-      border-radius: 4px;
-      background: #f9f9f9;
     }
 
     @media (max-width: 400px) {

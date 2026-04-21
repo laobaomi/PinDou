@@ -123,7 +123,7 @@
     }
 
     .btn-op {
-      width: 28px;
+      width: 20px;
       height: 28px;
       border: none;
       border-radius: 6px;
@@ -234,7 +234,7 @@
     // 弹出输入框减去指定值
     function minusPop(id) {
       const input = document.getElementById('input-' + id);
-      const subValue = prompt(`色号 ${id} 当前: ${input.value}\n请输入要减去的数值:`, "1000");
+      const subValue = prompt(`色号 ${id} 当前: ${input.value}\n请输入要减去的数值:`, "");
 
       if (subValue !== null && !isNaN(subValue)) {
         let result = (parseInt(input.value) || 0) - parseInt(subValue);

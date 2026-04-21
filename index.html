@@ -185,13 +185,13 @@
 
   <div class="container">
     <div class="header-sticky">
-      <h1>221全实色拼豆记录</h1>
+      <h1>221色拼豆库存管理</h1>
       <div id="saveTip" class="status-tip">数据已自动保存</div>
 
       <div class="controls">
         <div class="global-row">
           <span>默认累加值 (+):</span>
-          <input type="number" id="globalStep" value="1000"
+          <input type="number" id="globalStep" value="1000" onchange="saveStepSetting(this.value)"
             style="width: 70px; border: 1px solid #ddd; padding: 4px; border-radius: 4px; text-align: center;">
         </div>
         <div class="search-bar">
@@ -205,19 +205,23 @@
 
   <script>
     const beadsData = {
-      'A': ['#FDF193', '#FBE64E', '#F6E023', '#F3D211', '#F0C411', '#F3AF39', '#EC8F2F', '#E97424', '#E6571A', '#DD541D', '#BF6F4B', '#B4654F', '#9B4645', '#DF2612', '#FFED8E', '#FAEE44', '#F8E92B', '#F9D836', '#F6C50A', '#E6991F', '#C5751A', '#A55721', '#833F24', '#5D2D1B', '#EEDF83', '#DCB24A'],
-      'B': ['#EDFD88', '#D1F93D', '#B5F611', '#A9E91A', '#8ED614', '#76C30F', '#65B20D', '#5BA50B', '#4D9A0B', '#367332', '#2A6436', '#225638', '#20503D', '#1F4A3F', '#274033', '#2A3836', '#345241', '#4D723B', '#768E33', '#A5AC27', '#C2D62C', '#E1F033', '#FBFB36', '#E8FD3D', '#E1F43F', '#C5D61F', '#A0A61A', '#748A14', '#4D6E0B', '#3A610A', '#1C4F0A', '#0F420A'],
-      'C': ['#E1FDCD', '#BDF9DC', '#A1EDEA', '#96E4EA', '#81D6F6', '#65BCEF', '#4BA6E1', '#3B94D3', '#3185D1', '#236BB8', '#1C579E', '#174786', '#123A73', '#123568', '#11315F', '#122F5A', '#112D56', '#112A52', '#10264A', '#0F2444', '#0E223D', '#0E203B', '#0C1E37', '#0C1D34', '#091B31', '#08182D', '#071527', '#071221', '#07101E'],
-      'D': ['#D6D3F9', '#C1BCF8', '#A9A4F3', '#8D82ED', '#7F70DA', '#6E5CBD', '#6148A9', '#52388A', '#392061', '#2F1D50', '#4F2A66', '#5C3278', '#6E3F86', '#7F4D93', '#905A9F', '#A167AC', '#C074C4', '#D37FD6', '#E28EEA', '#C56ABF', '#963973', '#711F5A', '#EBE0FD', '#E2D4FD', '#DACAFC', '#D2BFFC'],
-      'E': ['#FDE4F2', '#FCCDE8', '#FDACD2', '#FE93C3', '#FE7EB3', '#FD659F', '#FD4A87', '#FE275E', '#E6396E', '#B92F56', '#8A2341', '#7F1F3B', '#FDBDFB', '#F694F3', '#ED6BEA', '#D633E6', '#D136CB', '#C332B1', '#B02E8A', '#7A1F5B', '#EEEDFD', '#D7D4FD', '#BDACFB', '#967AF8'],
-      'F': ['#FDD8CE', '#FDBCAB', '#FDA288', '#FF7D68', '#F85E53', '#EC4D49', '#DD3E40', '#CB2630', '#AF1F27', '#9E1C22', '#7B171A', '#5E1214', '#91000B', '#C4000C', '#E6000D', '#FD5136', '#FD6551', '#FD7B6C', '#FD8B81', '#FD9A91', '#FDAEA8', '#FDB8B2', '#FDCAC8', '#FDDCD9', '#F9000D'],
-      'G': ['#F9EDBD', '#F6E0B4', '#F1D4A6', '#E9C58F', '#E2B87F', '#D8AA6E', '#D1A164', '#CB995C', '#BC8C55', '#AF824D', '#A37A47', '#977243', '#8A673E', '#7F6039', '#89390B', '#A94F1A', '#C56424', '#DD762C', '#E68339', '#F39D3D', '#FAB93D'],
-      'H': ['#FDFFFF', '#F6FCFD', '#DCDDDF', '#B9BABF', '#999AA1', '#7F8089', '#6F7078', '#62636B', '#51525A', '#42434D', '#343540', '#272832', '#C5D6FD', '#A5C1F8', '#93B3E1', '#5D78A8', '#31405A', '#A6B690', '#81907D', '#5F6656', '#4B5248', '#D5D5DF', '#BFBFCF'],
-      'M': ['#BDD6D1', '#A9C5C1', '#91B5AE', '#8A9591', '#717F7A', '#6B7570', '#52625C', '#555F5A', '#47524C', '#404642', '#403350', '#46334D', '#56324D', '#8B3F48', '#3A4742']
+      'A': ['#FEF0C9', '#FCFDD3', '#F7F4A7', '#FBE553', '#F8CF37', '#FCA24A', '#F28947', '#FCD242', '#F3955F', '#EC7C4C', '#FFD28D', '#FDA170', '#F5C074', '#F55348', '#FDFC63', '#F7FAA3', '#F3D97A', '#F2B886', '#F6777E', '#F4CA66', '#F8DB8F', '#F2F280', '#E1CBC0', '#EFEC9B', '#F2CD72', '#EBC148'],
+      'B': ['#E7F42B', '#6AE849', '#A7EF7F', '#69D436', '#3BD960', '#6BD9A8', '#48A078', '#2F8C5F', '#1F4B30', '#9CD0C4', '#56702F', '#276246', '#C8E27F', '#B1E253', '#354F2C', '#C6E89B', '#90A53E', '#DFE36B', '#2DB48B', '#CFEBD5', '#225E5E', '#16373E', '#2E3221', '#F4FCA9', '#547562', '#8A6D43', '#CAD9B2', '#96DCA6', '#C6D868', '#E5FEAD', '#B3DC8D', '#96A258'],
+      'C': ['#F1FDF3', '#AAF9FE', '#ABE5FB', '#4ACAF7', '#13A4D3', '#6A9FCB', '#3678CC', '#254A9A', '#334DBB', '#58ABCD', '#3CD4D5', '#152B38', '#D5E8F7', '#DFF7F9', '#46B1A9', '#255482', '#18C5E7', '#1E2537', '#278090', '#1E69A3', '#C0DBF9', '#7BA7B0', '#C7DEFE', '#A4BFDA', '#ADE2EA', '#5D9AB9', '#D1DDF3', '#B1C2E0', '#3C4E74'],
+      'D': ['#B2B1EA', '#8092D0', '#3655A7', '#192879', '#B844C1', '#AB7FD8', '#8555AB', '#E3D8FA', '#CEB9F2', '#3D224B', '#BBBAE2', '#DBA1D4', '#A90D8C', '#892C94', '#392888', '#E2E0EE', '#C4CDF4', '#9964B4', '#DCBFDD', '#9D3DA9', '#A60497', '#3E4192', '#E8DEF6', '#818BD3', '#5854B5', '#D5BFF0'],
+      'E': ['#F8CACD', '#F3C6E5', '#F9A0CC', '#E77BAD', '#EB5D99', '#FA287F', '#AB127A', '#F7DBE7', '#E18CE1', '#AE406F', '#F8E9E4', '#E9A1D1', '#95187C', '#F2D2B9', '#E9CAD2', '#FEF6F3', '#FAEAF7', '#F8CBEC', '#F4D0F4', '#F2E5EF', '#DEC0C2', '#C88BB5', '#9E85A2', '#FEE0FA'],
+      'F': ['#FBA09D', '#ED695A', '#E94659', '#FC0927', '#EB2023', '#BD3C36', '#8F1842', '#B40830', '#E16D84', '#93573D', '#74342A', '#F53E5D', '#C84734', '#F3A3AE', '#C60E30', '#EECFD4', '#EDB1A6', '#D88553', '#BD5168', '#F2A68E', '#F4A6CD', '#F284A1', '#E34F31', '#F4C2C1', '#F6070D'],
+      'G': ['#FFE7C3', '#FFD5BD', '#E3B8AF', '#E1B19A', '#F7A86F', '#F09F74', '#8F5337', '#451D13', '#E9BB87', '#C08936', '#E2C8A3', '#D8B08D', '#D49061', '#916B58', '#F3F5DF', '#E7DCC8', '#64514A', '#F4E3D9', '#E6AD5C', '#915749', '#C79175'],
+      'H': ['#FDFDFD', '#FEFEFE', '#CBC9D7', '#979298', '#636267', '#38373D', '#010004', '#F3E6F0', '#E0E1D3', '#F5EFFB', '#D0CED3', '#FEFCF0', '#F4EBDA', '#DDE6F5', '#959BBB', '#2A1F1B', '#F5F3F4', '#F3F2ED', '#E9E4E0', '#97A5AE', '#F3F5E8', '#EBEBEB', '#CBCBCB'],
+      'M': ['#BBC8BF', '#94A291', '#718795', '#EDE5E3', '#DDCFB4', '#D3C7A1', '#C0ACAB', '#AF939F', '#B89378', '#C1B2C7', '#977F95', '#766062', '#D4A8A5', '#CF726D', '#827883']
     };
 
     const grid = document.getElementById('beadsGrid');
     const savedData = JSON.parse(localStorage.getItem('beadsInventory_v4')) || {};
+
+    // 在 script 标签最开头增加这一行，读取存过的累加值，如果没有则默认为 1000
+    const savedStep = localStorage.getItem('globalStepSetting') || 1000;
+    document.getElementById('globalStep').value = savedStep;
 
     function init() {
       Object.keys(beadsData).forEach(prefix => {
@@ -232,7 +236,7 @@
                     <div class="code-name">${id}</div>
                     <div class="counter-group">
                         <button class="btn-op btn-minus" onclick="minusPop('${id}')">-</button>
-                        <input type="number" id="input-${id}" class="count-input" value="${count}" oninput="updateStorage('${id}', this.value)">
+                        <input type="number" id="input-${id}" class="count-input" value="${count}" min="0" oninput="updateStorage('${id}', this.value)">
                         <button class="btn-op btn-plus" onclick="plusCount('${id}')">+</button>
                     </div>
                 `;
@@ -252,17 +256,29 @@
     // 弹出输入框减去指定值
     function minusPop(id) {
       const input = document.getElementById('input-' + id);
-      const subValue = prompt(`色号 ${id} 当前: ${input.value}\n请输入要减去的数值:`, "");
+      // 弹出提示框
+      const subValue = prompt(`色号 ${id} 当前库存: ${input.value}\n请输入要减去的数量:`, "");
 
-      if (subValue !== null && !isNaN(subValue)) {
-        let result = (parseInt(input.value) || 0) - parseInt(subValue);
+      // 只有当用户点击“确定”且输入的是数字时才执行
+      if (subValue !== null && !isNaN(subValue) && subValue !== "") {
+        let current = parseInt(input.value) || 0;
+        let result = current - parseInt(subValue);
+
+        // 确保库存不会变成负数
         input.value = result < 0 ? 0 : result;
+
+        // 记得调用你原来的保存函数
         updateStorage(id, input.value);
       }
     }
 
     function updateStorage(id, val) {
-      savedData[id] = parseInt(val) || 0;
+      let cleanVal = Math.max(0, parseInt(val) || 0);
+      savedData[id] = cleanVal;
+
+      // 将修正后的数字同步回输入框（这样用户输入 -5 或 +100 会瞬间变成 0 或 100）
+      document.getElementById('input-' + id).value = cleanVal;
+
       localStorage.setItem('beadsInventory_v4', JSON.stringify(savedData));
 
       const tip = document.getElementById('saveTip');
@@ -281,6 +297,15 @@
         const code = item.querySelector('.code-name').innerText;
         item.style.display = code.includes(filter) ? "flex" : "none";
       });
+    }
+
+    function saveStepSetting(val) {
+      let step = parseInt(val) || 0;
+      if (step < 0) step = 0;
+
+      document.getElementById('globalStep').value = step;
+
+      localStorage.setItem('globalStepSetting', step);
     }
 
     init();

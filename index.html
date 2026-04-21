@@ -3,102 +3,162 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>221色拼豆库存记录</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>221色拼豆库存管理</title>
   <style>
+    :root {
+      --primary: #007aff;
+      --danger: #ff3b30;
+      --success: #34c759;
+    }
+
     body {
-      font-family: sans-serif;
-      background: #f4f7f6;
-      padding: 20px;
-      color: #333;
+      font-family: -apple-system, system-ui, sans-serif;
+      background: #f2f2f7;
+      margin: 0;
+      padding: 10px;
+      padding-bottom: 50px;
+    }
+
+    /* 顶部固定区域 */
+    .header-sticky {
+      position: sticky;
+      top: 0;
+      background: #f2f2f7;
+      z-index: 100;
+      padding: 5px 0 10px 0;
     }
 
     .container {
-      max-width: 900px;
+      max-width: 800px;
       margin: 0 auto;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
       text-align: center;
-      color: #4a4a4a;
+      color: #1c1c1e;
+      font-size: 1.4rem;
+      margin: 10px 0;
     }
 
-    /* 搜索栏 */
-    .search-bar {
-      margin-bottom: 20px;
+    .status-tip {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #8e8e93;
+      height: 18px;
+      margin-bottom: 5px;
+    }
+
+    .status-tip.saving {
+      color: var(--success);
+      font-weight: bold;
+    }
+
+    .controls {
+      background: white;
+      padding: 12px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      margin-bottom: 10px;
       display: flex;
-      gap: 10px;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    input[type="text"] {
-      flex: 1;
+    .global-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.9rem;
+    }
+
+    .search-bar input {
+      width: 100%;
       padding: 10px;
       border: 1px solid #ddd;
-      border-radius: 4px;
+      border-radius: 8px;
+      font-size: 16px;
+      outline: none;
+      box-sizing: border-box;
     }
 
-    /* 表格样式 */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
+    /* 一行两个布局 */
+    .beads-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
     }
 
-    th,
-    td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #eee;
+    .bead-item {
+      background: white;
+      padding: 10px 8px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     }
 
-    th {
-      background-color: #f8f9fa;
-      position: sticky;
-      top: 0;
+    .color-view {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 1px solid #eee;
     }
 
-    /* 颜色预览块 */
-    .color-preview {
-      width: 30px;
-      height: 30px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      display: inline-block;
-      vertical-align: middle;
+    .code-name {
+      font-weight: bold;
+      font-size: 0.9rem;
+      width: 32px;
+      color: #3a3a3c;
     }
 
-    /* 数量输入框 */
-    .count-input {
-      width: 80px;
-      padding: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      text-align: center;
+    /* 计数器组合 */
+    .counter-group {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      gap: 3px;
     }
 
-    /* 统计栏 */
-    .stats {
-      margin-top: 20px;
-      font-size: 0.9em;
-      color: #666;
-      text-align: right;
-    }
-
-    .save-btn {
-      background: #27ae60;
-      color: white;
+    .btn-op {
+      width: 28px;
+      height: 28px;
       border: none;
-      padding: 10px 20px;
-      border-radius: 4px;
+      border-radius: 6px;
+      font-size: 18px;
       cursor: pointer;
-      float: left;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .save-btn:hover {
-      background: #219150;
+    .btn-minus {
+      background-color: var(--danger);
+    }
+
+    .btn-plus {
+      background-color: var(--success);
+    }
+
+    .count-input {
+      width: 100%;
+      min-width: 40px;
+      border: 1px solid #efeff4;
+      text-align: center;
+      padding: 5px 0;
+      font-size: 0.95rem;
+      border-radius: 4px;
+      background: #f9f9f9;
+    }
+
+    @media (max-width: 400px) {
+      .code-name {
+        width: 28px;
+        font-size: 0.8rem;
+      }
     }
   </style>
 </head>
@@ -106,101 +166,107 @@
 <body>
 
   <div class="container">
-    <h1>拼豆库存清单 (221色)</h1>
+    <div class="header-sticky">
+      <h1>221全实色拼豆记录</h1>
+      <div id="saveTip" class="status-tip">数据已自动保存</div>
 
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="搜索色号或颜色名称..." onkeyup="filterTable()">
+      <div class="controls">
+        <div class="global-row">
+          <span>默认累加值 (+):</span>
+          <input type="number" id="globalStep" value="1000"
+            style="width: 70px; border: 1px solid #ddd; padding: 4px; border-radius: 4px; text-align: center;">
+        </div>
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="搜索色号..." onkeyup="filterTable()">
+        </div>
+      </div>
     </div>
 
-    <button class="save-btn" onclick="saveData()">保存到本地</button>
-    <div class="stats">共计 221 个色号</div>
-
-    <table id="beadsTable">
-      <thead>
-        <tr>
-          <th>色号/名称</th>
-          <th>颜色预览</th>
-          <th>当前库存 (颗)</th>
-          <th>备注</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody">
-      </tbody>
-    </table>
+    <div class="beads-grid" id="beadsGrid"></div>
   </div>
 
   <script>
-    // 模拟部分数据示例，你可以根据实际色卡修改名称和Hex色值
-    // 这里先生成221行空数据供你填写
-    const totalColors = 221;
-    const tableBody = document.getElementById('tableBody');
+    const beadsData = {
+      'A': ['#FDF193', '#FBE64E', '#F6E023', '#F3D211', '#F0C411', '#F3AF39', '#EC8F2F', '#E97424', '#E6571A', '#DD541D', '#BF6F4B', '#B4654F', '#9B4645', '#DF2612', '#FFED8E', '#FAEE44', '#F8E92B', '#F9D836', '#F6C50A', '#E6991F', '#C5751A', '#A55721', '#833F24', '#5D2D1B', '#EEDF83', '#DCB24A'],
+      'B': ['#EDFD88', '#D1F93D', '#B5F611', '#A9E91A', '#8ED614', '#76C30F', '#65B20D', '#5BA50B', '#4D9A0B', '#367332', '#2A6436', '#225638', '#20503D', '#1F4A3F', '#274033', '#2A3836', '#345241', '#4D723B', '#768E33', '#A5AC27', '#C2D62C', '#E1F033', '#FBFB36', '#E8FD3D', '#E1F43F', '#C5D61F', '#A0A61A', '#748A14', '#4D6E0B', '#3A610A', '#1C4F0A', '#0F420A'],
+      'C': ['#E1FDCD', '#BDF9DC', '#A1EDEA', '#96E4EA', '#81D6F6', '#65BCEF', '#4BA6E1', '#3B94D3', '#3185D1', '#236BB8', '#1C579E', '#174786', '#123A73', '#123568', '#11315F', '#122F5A', '#112D56', '#112A52', '#10264A', '#0F2444', '#0E223D', '#0E203B', '#0C1E37', '#0C1D34', '#091B31', '#08182D', '#071527', '#071221', '#07101E'],
+      'D': ['#D6D3F9', '#C1BCF8', '#A9A4F3', '#8D82ED', '#7F70DA', '#6E5CBD', '#6148A9', '#52388A', '#392061', '#2F1D50', '#4F2A66', '#5C3278', '#6E3F86', '#7F4D93', '#905A9F', '#A167AC', '#C074C4', '#D37FD6', '#E28EEA', '#C56ABF', '#963973', '#711F5A', '#EBE0FD', '#E2D4FD', '#DACAFC', '#D2BFFC'],
+      'E': ['#FDE4F2', '#FCCDE8', '#FDACD2', '#FE93C3', '#FE7EB3', '#FD659F', '#FD4A87', '#FE275E', '#E6396E', '#B92F56', '#8A2341', '#7F1F3B', '#FDBDFB', '#F694F3', '#ED6BEA', '#D633E6', '#D136CB', '#C332B1', '#B02E8A', '#7A1F5B', '#EEEDFD', '#D7D4FD', '#BDACFB', '#967AF8'],
+      'F': ['#FDD8CE', '#FDBCAB', '#FDA288', '#FF7D68', '#F85E53', '#EC4D49', '#DD3E40', '#CB2630', '#AF1F27', '#9E1C22', '#7B171A', '#5E1214', '#91000B', '#C4000C', '#E6000D', '#FD5136', '#FD6551', '#FD7B6C', '#FD8B81', '#FD9A91', '#FDAEA8', '#FDB8B2', '#FDCAC8', '#FDDCD9', '#F9000D'],
+      'G': ['#F9EDBD', '#F6E0B4', '#F1D4A6', '#E9C58F', '#E2B87F', '#D8AA6E', '#D1A164', '#CB995C', '#BC8C55', '#AF824D', '#A37A47', '#977243', '#8A673E', '#7F6039', '#89390B', '#A94F1A', '#C56424', '#DD762C', '#E68339', '#F39D3D', '#FAB93D'],
+      'H': ['#FDFFFF', '#F6FCFD', '#DCDDDF', '#B9BABF', '#999AA1', '#7F8089', '#6F7078', '#62636B', '#51525A', '#42434D', '#343540', '#272832', '#C5D6FD', '#A5C1F8', '#93B3E1', '#5D78A8', '#31405A', '#A6B690', '#81907D', '#5F6656', '#4B5248', '#D5D5DF', '#BFBFCF'],
+      'M': ['#BDD6D1', '#A9C5C1', '#91B5AE', '#8A9591', '#717F7A', '#6B7570', '#52625C', '#555F5A', '#47524C', '#404642', '#403350', '#46334D', '#56324D', '#8B3F48', '#3A4742']
+    };
 
-    // 尝试从本地存储读取数据
-    const savedData = JSON.parse(localStorage.getItem('beadsInventory')) || {};
+    const grid = document.getElementById('beadsGrid');
+    const savedData = JSON.parse(localStorage.getItem('beadsInventory_v4')) || {};
 
-    for (let i = 1; i <= totalColors; i++) {
-      const rowData = savedData[i] || { code: '色号-' + i, color: '#FFFFFF', count: 0, note: '' };
+    function init() {
+      Object.keys(beadsData).forEach(prefix => {
+        beadsData[prefix].forEach((hex, index) => {
+          const id = prefix + (index + 1);
+          const count = savedData[id] || 0;
 
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-            <td><input type="text" value="${rowData.code}" style="border:none; background:transparent;"></td>
-            <td>
-                <input type="color" value="${rowData.color}" onchange="updateColor(this, ${i})">
-            </td>
-            <td>
-                <input type="number" class="count-input" value="${rowData.count}" onchange="updateCount(${i}, this.value)">
-            </td>
-            <td><input type="text" value="${rowData.note}" placeholder="备注..." onchange="updateNote(${i}, this.value)" style="border:none; width:100%"></td>
-        `;
-      tableBody.appendChild(tr);
+          const item = document.createElement('div');
+          item.className = 'bead-item';
+          item.innerHTML = `
+                    <div class="color-view" style="background:${hex}"></div>
+                    <div class="code-name">${id}</div>
+                    <div class="counter-group">
+                        <button class="btn-op btn-minus" onclick="minusPop('${id}')">-</button>
+                        <input type="number" id="input-${id}" class="count-input" value="${count}" oninput="updateStorage('${id}', this.value)">
+                        <button class="btn-op btn-plus" onclick="plusCount('${id}')">+</button>
+                    </div>
+                `;
+          grid.appendChild(item);
+        });
+      });
     }
 
-    // 数据更新逻辑
-    function updateCount(id, val) {
-      let data = JSON.parse(localStorage.getItem('beadsInventory')) || {};
-      if (!data[id]) data[id] = {};
-      data[id].count = val;
-      localStorage.setItem('beadsInventory', JSON.stringify(data));
+    // 累加全局值
+    function plusCount(id) {
+      const step = parseInt(document.getElementById('globalStep').value) || 0;
+      const input = document.getElementById('input-' + id);
+      input.value = (parseInt(input.value) || 0) + step;
+      updateStorage(id, input.value);
     }
 
-    function updateColor(el, id) {
-      let data = JSON.parse(localStorage.getItem('beadsInventory')) || {};
-      if (!data[id]) data[id] = {};
-      data[id].color = el.value;
-      localStorage.setItem('beadsInventory', JSON.stringify(data));
-    }
+    // 弹出输入框减去指定值
+    function minusPop(id) {
+      const input = document.getElementById('input-' + id);
+      const subValue = prompt(`色号 ${id} 当前: ${input.value}\n请输入要减去的数值:`, "1000");
 
-    function updateNote(id, val) {
-      let data = JSON.parse(localStorage.getItem('beadsInventory')) || {};
-      if (!data[id]) data[id] = {};
-      data[id].note = val;
-      localStorage.setItem('beadsInventory', JSON.stringify(data));
-    }
-
-    function saveData() {
-      alert('数据已自动保存至浏览器缓存！下次打开此页面数据依然存在。');
-    }
-
-    // 搜索功能
-    function filterTable() {
-      const input = document.getElementById("searchInput");
-      const filter = input.value.toUpperCase();
-      const tr = tableBody.getElementsByTagName("tr");
-
-      for (let i = 0; i < tr.length; i++) {
-        const td = tr[i].getElementsByTagName("td")[0];
-        if (td) {
-          const textValue = td.textContent || td.querySelector('input').value;
-          if (textValue.toUpperCase().indexOf(filter) > -1) {
-            tr[i].style.display = "";
-          } else {
-            tr[i].style.display = "none";
-          }
-        }
+      if (subValue !== null && !isNaN(subValue)) {
+        let result = (parseInt(input.value) || 0) - parseInt(subValue);
+        input.value = result < 0 ? 0 : result;
+        updateStorage(id, input.value);
       }
     }
-  </script>
 
+    function updateStorage(id, val) {
+      savedData[id] = parseInt(val) || 0;
+      localStorage.setItem('beadsInventory_v4', JSON.stringify(savedData));
+
+      const tip = document.getElementById('saveTip');
+      tip.innerText = "● 正在同步更新...";
+      tip.classList.add('saving');
+      clearTimeout(window.saveTimer);
+      window.saveTimer = setTimeout(() => {
+        tip.innerText = "数据已自动保存";
+        tip.classList.remove('saving');
+      }, 800);
+    }
+
+    function filterTable() {
+      const filter = document.getElementById("searchInput").value.toUpperCase();
+      document.querySelectorAll('.bead-item').forEach(item => {
+        const code = item.querySelector('.code-name').innerText;
+        item.style.display = code.includes(filter) ? "flex" : "none";
+      });
+    }
+
+    init();
+  </script>
 </body>
 
 </html>
